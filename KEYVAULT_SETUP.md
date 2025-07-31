@@ -1,6 +1,32 @@
 # Azure Key Vault Integration Guide
 
-This guide explains how to set up and use Azure Key Vault to securely store your Egnyte and SharePoint API credentials.
+## ✅ Current Status (Updated July 30, 2025)
+
+**Key Vault Setup: COMPLETE** 🎉
+- **Key Vault Name**: `egnytespkv-1753929214`
+- **Key Vault URL**: `https://egnytespkv-1753929214.vault.azure.net/`
+- **Resource Group**: `egnyte-sharepoint-sync-rg`
+- **RBAC Permissions**: ✅ Assigned (Key Vault Secrets Officer)
+
+**Secrets Stored:**
+- ✅ `azure-client-id`: `90cf08a3-b3a4-4c02-9e9c-d7b93e7b2b6b`
+- ✅ `azure-client-secret`: `[STORED SECURELY]`
+- ✅ `azure-tenant-id`: `cf198459-871a-4cec-aa12-7bedb6b4f602`
+- ⏳ `egnyte-client-id`: `PLACEHOLDER_EGNYTE_CLIENT_ID` (needs real value)
+- ⏳ `egnyte-client-secret`: `PLACEHOLDER_EGNYTE_CLIENT_SECRET` (needs real value)
+
+**Application Status:**
+- ✅ Backend Functions: Running on `localhost:7071`
+- ✅ Frontend React App: Running on `localhost:3002`
+- ✅ Mock APIs: Working for UI testing
+- ✅ SharePoint Auth: Working with real Azure credentials
+
+**Next Steps:**
+1. **Get Egnyte API Credentials** (see [Egnyte Setup](#egnyte-api-setup) below)
+2. **Update Key Vault with Real Egnyte Values**
+3. **Test End-to-End Sync Workflow**
+
+---
 
 ## Prerequisites
 
@@ -20,13 +46,13 @@ chmod +x setup-keyvault.sh
 # Run the setup script
 ./setup-keyvault.sh \
   --resource-group "egnyte-sharepoint-sync-rg" \
-  --keyvault-name "egnyte-sp-sync-kv" \
-  --location "East US" \
+  --keyvault-name "egnytespkv-1753929214" \
+  --location "eastus" \
   --egnyte-client-id "your-egnyte-client-id" \
   --egnyte-client-secret "your-egnyte-client-secret" \
-  --azure-client-id "your-azure-client-id" \
-  --azure-client-secret "your-azure-client-secret" \
-  --azure-tenant-id "your-azure-tenant-id"
+  --azure-client-id "90cf08a3-b3a4-4c02-9e9c-d7b93e7b2b6b" \
+  --azure-client-secret "o5L8Q~hpRBTYFkllhNPDGc3V7y4hKKBsz7V8zcWK" \
+  --azure-tenant-id "cf198459-871a-4cec-aa12-7bedb6b4f602"
 ```
 
 ### Option 2: Manual Setup
@@ -39,21 +65,21 @@ az group create --name "egnyte-sharepoint-sync-rg" --location "East US"
 2. **Create Key Vault**
 ```bash
 az keyvault create \
-  --name "egnyte-sp-sync-kv" \
+  --name "egnytespkv-1753929214" \
   --resource-group "egnyte-sharepoint-sync-rg" \
-  --location "East US"
+  --location "eastus"
 ```
 
 3. **Store Secrets**
 ```bash
 # Egnyte credentials
-az keyvault secret set --vault-name "egnyte-sp-sync-kv" --name "egnyte-client-id" --value "your-egnyte-client-id"
-az keyvault secret set --vault-name "egnyte-sp-sync-kv" --name "egnyte-client-secret" --value "your-egnyte-client-secret"
+az keyvault secret set --vault-name "egnytespkv-1753929214" --name "egnyte-client-id" --value "your-egnyte-client-id"
+az keyvault secret set --vault-name "egnytespkv-1753929214" --name "egnyte-client-secret" --value "your-egnyte-client-secret"
 
-# Azure/SharePoint credentials
-az keyvault secret set --vault-name "egnyte-sp-sync-kv" --name "azure-client-id" --value "your-azure-client-id"
-az keyvault secret set --vault-name "egnyte-sp-sync-kv" --name "azure-client-secret" --value "your-azure-client-secret"
-az keyvault secret set --vault-name "egnyte-sp-sync-kv" --name "azure-tenant-id" --value "your-azure-tenant-id"
+# Azure/SharePoint credentials  
+az keyvault secret set --vault-name "egnytespkv-1753929214" --name "azure-client-id" --value "90cf08a3-b3a4-4c02-9e9c-d7b93e7b2b6b"
+az keyvault secret set --vault-name "egnytespkv-1753929214" --name "azure-client-secret" --value "o5L8Q~hpRBTYFkllhNPDGc3V7y4hKKBsz7V8zcWK"
+az keyvault secret set --vault-name "egnytespkv-1753929214" --name "azure-tenant-id" --value "cf198459-871a-4cec-aa12-7bedb6b4f602"
 ```
 
 ## Configuration
@@ -64,7 +90,7 @@ After setting up Key Vault, update your environment variables:
 
 **For Production (using Key Vault):**
 ```bash
-KEY_VAULT_URL=https://your-keyvault-name.vault.azure.net/
+KEY_VAULT_URL=https://egnytespkv-1753929214.vault.azure.net/
 EGNYTE_DOMAIN=your-egnyte-domain
 EGNYTE_REDIRECT_URI=https://your-app-domain.com
 AZURE_REDIRECT_URI=https://your-app-domain.com
@@ -73,7 +99,7 @@ AZURE_REDIRECT_URI=https://your-app-domain.com
 **For Local Development (optional - can still use Key Vault):**
 ```bash
 # Option 1: Use Key Vault (recommended)
-KEY_VAULT_URL=https://your-keyvault-name.vault.azure.net/
+KEY_VAULT_URL=https://egnytespkv-1753929214.vault.azure.net/
 EGNYTE_DOMAIN=your-egnyte-domain
 EGNYTE_REDIRECT_URI=http://localhost:3000
 AZURE_REDIRECT_URI=http://localhost:3000
@@ -83,9 +109,9 @@ EGNYTE_DOMAIN=your-egnyte-domain
 EGNYTE_CLIENT_ID=your-egnyte-client-id
 EGNYTE_CLIENT_SECRET=your-egnyte-client-secret
 EGNYTE_REDIRECT_URI=http://localhost:3000
-AZURE_CLIENT_ID=your-azure-client-id
-AZURE_CLIENT_SECRET=your-azure-client-secret
-AZURE_TENANT_ID=your-azure-tenant-id
+AZURE_CLIENT_ID=90cf08a3-b3a4-4c02-9e9c-d7b93e7b2b6b
+AZURE_CLIENT_SECRET=o5L8Q~hpRBTYFkllhNPDGc3V7y4hKKBsz7V8zcWK
+AZURE_TENANT_ID=cf198459-871a-4cec-aa12-7bedb6b4f602
 AZURE_REDIRECT_URI=http://localhost:3000
 ```
 
@@ -236,3 +262,46 @@ Set the logging level to Debug to see detailed Key Vault operations:
 - Use the Standard tier for production (includes SLA)
 - Basic tier is sufficient for development/testing
 - Monitor secret operations to optimize costs
+
+---
+
+## Egnyte API Setup
+
+To complete the setup, you need to obtain Egnyte API credentials:
+
+### 1. Access Egnyte Admin Panel
+1. Log into your Egnyte domain as an administrator
+2. Go to **Settings** → **Integrations** → **API Applications**
+3. Click **Create Application** or **Add Application**
+
+### 2. Create OAuth Application
+Configure your Egnyte OAuth application with these settings:
+- **Application Name**: `Egnyte SharePoint Sync`
+- **Application Type**: `Web Application`
+- **Redirect URI**: `http://localhost:3002` (for local development)
+- **Scopes**: Select the following permissions:
+  - `Egnyte.filesystem` (to read and access files)
+  - `Egnyte.user` (to get user information)
+
+### 3. Get Credentials
+After creating the application, you'll receive:
+- **Client ID** (also called Application Key)
+- **Client Secret** (also called Shared Secret)
+
+### 4. Update Key Vault
+Once you have the real Egnyte credentials, run these commands:
+```bash
+# Update Egnyte Client ID
+az keyvault secret set --vault-name "egnytespkv-1753929214" --name "egnyte-client-id" --value "YOUR_REAL_EGNYTE_CLIENT_ID"
+
+# Update Egnyte Client Secret  
+az keyvault secret set --vault-name "egnytespkv-1753929214" --name "egnyte-client-secret" --value "YOUR_REAL_EGNYTE_CLIENT_SECRET"
+```
+
+### 5. Update Environment Variables
+Also update your local `.env` file:
+```bash
+EGNYTE_DOMAIN=your-egnyte-domain.egnyte.com
+EGNYTE_CLIENT_ID=YOUR_REAL_EGNYTE_CLIENT_ID
+EGNYTE_CLIENT_SECRET=YOUR_REAL_EGNYTE_CLIENT_SECRET
+```
