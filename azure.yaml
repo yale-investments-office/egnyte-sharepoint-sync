@@ -1,0 +1,16 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
+
+name: egnyte-spo-sync
+metadata:
+  template: egnyte-spo-sync@0.0.1-beta
+
+services:
+  frontend:
+    project: ./frontend
+    language: js
+    host: staticwebapp
+
+  backend:
+    project: ./backend
+    language: dotnet
+    host: function
