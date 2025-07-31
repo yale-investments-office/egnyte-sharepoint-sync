@@ -31,7 +31,7 @@ namespace EgnyteSharePointSync
                 var clientId = await config.GetEgnyteClientIdAsync();
                 var redirectUri = config.GetEgnyteRedirectUri();
 
-                var authUrl = $"https://{domain}.egnyte.com/puboauth/token" +
+                var authUrl = $"https://{domain}/puboauth/token" +
                              $"?client_id={clientId}" +
                              $"&redirect_uri={Uri.EscapeDataString(redirectUri)}" +
                              "&response_type=code" +
@@ -91,7 +91,7 @@ namespace EgnyteSharePointSync
                 };
 
                 var content = new FormUrlEncodedContent(tokenRequest);
-                var response = await httpClient.PostAsync($"https://{domain}.egnyte.com/puboauth/token", content);
+                var response = await httpClient.PostAsync($"https://{domain}/puboauth/token", content);
                 
                 if (response.IsSuccessStatusCode)
                 {
@@ -147,7 +147,7 @@ namespace EgnyteSharePointSync
                 httpClient.DefaultRequestHeaders.Clear();
                 httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
 
-                var response = await httpClient.GetAsync($"https://{domain}.egnyte.com/pubapi/v1/fs{path}");
+                var response = await httpClient.GetAsync($"https://{domain}/pubapi/v1/fs{path}");
                 
                 if (response.IsSuccessStatusCode)
                 {
@@ -185,7 +185,7 @@ namespace EgnyteSharePointSync
                 httpClient.DefaultRequestHeaders.Clear();
                 httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
 
-                var response = await httpClient.GetAsync($"https://{domain}.egnyte.com/pubapi/v1/fs-content{filePath}");
+                var response = await httpClient.GetAsync($"https://{domain}/pubapi/v1/fs-content{filePath}");
                 
                 if (response.IsSuccessStatusCode)
                 {

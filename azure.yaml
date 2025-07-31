@@ -4,10 +4,13 @@ name: egnyte-spo-sync
 metadata:
   template: egnyte-spo-sync@0.0.1-beta
 
+infra:
+  provider: bicep
+
 services:
   frontend:
     project: ./frontend
-    language: js
+    language: ts
     host: staticwebapp
 
   backend:

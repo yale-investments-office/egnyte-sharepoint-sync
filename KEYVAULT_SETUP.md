@@ -301,7 +301,7 @@ az keyvault secret set --vault-name "egnytespkv-1753929214" --name "egnyte-clien
 ### 5. Update Environment Variables
 Also update your local `.env` file:
 ```bash
-EGNYTE_DOMAIN=your-egnyte-domain.egnyte.com
+EGNYTE_DOMAIN=yaleinvestments.egnyte.com
 EGNYTE_CLIENT_ID=YOUR_REAL_EGNYTE_CLIENT_ID
 EGNYTE_CLIENT_SECRET=YOUR_REAL_EGNYTE_CLIENT_SECRET
 ```
